@@ -1,0 +1,47 @@
+<div class="span9 cont-lists" >
+	<ul class="breadcrumb my-breadcrumb full-shadow">
+		<li>
+			<a href="#contacts">Lists</a>
+		</li>
+		<li>
+			<a ng-href="#/contacts/list/{{listId}}">{{listName}}</a>
+		</li>
+		<li class="active">
+			{{'Forms'| i18n}}
+		</li>
+	</ul>
+	<div class="page-header full-shadow">
+		<h1>{{'Forms' | i18n}}</h1>
+		<p>Manage your signup/opt-in forms.<br />Every contact list can be associated with multiple signup forms: you can customize either the form look and the subscription process.</p>
+		<a ng-href="#/contacts/list/{{listId}}/signupforms/new" class="btn btn-function btn-right-top"><i class="fa-lg fa-plus"></i>{{'new' | i18n }}</a>
+	</div>
+
+	<div class="subnav-content" ng-switch="formsListStatus">
+		<div ng-switch-when="populated">
+			<grid2 
+				datasource="signupformsDatasource"
+				actions = "signupformsActions"
+				parameters= "signupformsParameters"
+				headtemplateurl="modules/contacts/signup_forms/views/signupforms_head_row.html"
+				rowtemplateurl="modules/contacts/signup_forms/views/signupforms_row.html">
+			</grid2>
+		</div>
+		<div ng-switch-when="empty" class="alert">
+			{{'insert_first_form' | i18n}}
+		</div>
+		<div ng-switch-when="loading">
+		</div>
+	</div>
+
+</div>
+<div class="span3 col-service full-shadow">
+	<div class="tips-box">
+			<h5>{{'How can I use signup forms in my website ?' | i18n}}</h5>
+            <div class="inner-tip">
+			<p>A subscription form is definitely the best way to collect new customers and grow your permission-based list: adding it to your website - best if in a relevant place - will drive the visitors' attention to make a quick and safe subscription to your newsletter.</p>
+            <p>We have streamlined the creation process to make it as easier as possible: in a few steps you can get both a direct link hosted on our server and the HTML code to install the form directly on your website. Tip: don't forget to add a privacy disclaimer.
+			</p>
+            </div>
+    </div>
+</div>
+

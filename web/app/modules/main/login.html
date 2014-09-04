@@ -1,0 +1,22 @@
+	<div class="login"> 
+     <p class="text-center"><img src="img/logo.png" alt="logo" class="login-logo"></p>   
+        <div class="main-content full-shadow">
+       
+			<form ng-submit="login(username,password)">
+				<fieldset class="row-fluid">
+                <input type="hidden" name="to" value="/">
+				 <div class="clearfix">
+						<label for="inputEmail">Email</label>
+						<input ng-model="username" type="text" value="demo" class="span12 login-username" autofocus="autofocus" placeholder="username">
+					</div>
+					 <div class="clearfix">
+						<label for="inputPassword">Password</label>
+						<input ng-model="password" value="demo" type="password" class="span12 login-password" placeholder="password">
+					</div>
+				<div class="login-footer clearfix pull-right">
+					<button class="btn btn-confirm" type="submit" id="submit" >{{'Login'| i18n}}</button>				
+				</div>
+                </fieldset>
+			</form>
+		</div>
+	</div>

@@ -1,0 +1,208 @@
+<div ng-controller="SignupFormsStep2Ctrl">
+  <!--- bof title 1 ================================================== -->
+  <div class="row-fluid">
+    <div class="span9">
+      <h2>Please choose a template&#8230;</h2>
+       <div class="page-header-text">
+      <p>We offer a vast choice of pre-designed HTML templates ready for use.</p>
+      </div>
+    </div>    
+	<div class="span3">
+      <label>Category</label>
+      <select class="span12" ng-model="form_template_category_id" ng-options="tc.id as tc.name for tc in form_template_categories">
+      </select>
+    </div>
+  </div>
+  <!-- bof test -->
+  <!--- bof carousel ================================================== -->
+	<div formcarousel actions="templateCarouselActions" templates="available_form_templates"></div>
+  <!--- bof title 2 ================================================== -->
+  <div class="row-fluid">
+    <h2>&#8230;and customize it</h2>
+    <div class="page-header-text">
+    <p>Edit freely your form with our smart editor. You can drag and drop new elements and change colours and font styles.</p>
+    </div>
+  </div>
+  <!--- bof editor ================================================== -->
+  <div class="row-fluid">  
+   <ul class="nav nav-tabs tab-lang">
+        <li ng-repeat="pane in formModel.form_languages track by $index" ng-class="checkActivePane(pane)">
+        <a ng-click="select(pane);$event.stopPropagation()">{{getLangName(pane.language_id) | i18n }}</a>
+
+        <button class="btn btn-halfheight" ng-hide="pane.language_id == formModel.default_language_id" ng-click="deleteLang($index)"> <i class="fa-lg fa-times"></i> </button>
+        </li>
+        <i ng-show="getLangOptions().length && !idle"><a ng-click="addLang(); newLanguage=getLangOptions()[0].id">{{"add_lang" | i18n}}</a></i>
+        <div ng-show="idle" class="add-lang">
+          <select ng-show="idle" class="lang-select" ng-model="newLanguage" ng-options="langOption.id as langOption.name | i18n for langOption in getLangOptions()">
+          </select>
+          <a ng-click="cancelAddLang()" class="btn btn-function btn-halfheight"> {{'cancel' | i18n }} </a> <a ng-click="pushLanguage(newLanguage,formModel.default_language_id);newLanguage=-1;" class="btn btn-confirm btn-halfheight"> {{'add' | i18n}} </a> </div>
+      </ul>
+      
+  <div class="editor-form" ng-style="{'background-color': formModel.page_bg_style}">
+<div class="editor-form-inner">
+    <div class="span9">
+	<div class="tab-content">
+	<div class="tab-pane active">
+			<!--<div class="row-fluid top-editor"> </div> ng-style="{'background-color': formModel.page_bg_style}"-->
+            <div class="row-fluid draggable-zone">
+              <script type="text/ng-template" id="fieldEditorPopover.html">
+                            <form novalidate name="fieldForm" ng-keypress="handleKeyPress($event)">
+                                <div class="row-fluid">
+                                    <div ng-switch="element.type">
+                                        <div ng-switch-when="HEADER">
+                                            <label>{{'text' | i18n}}</label>
+                                            <input type="text" ng-model="element.form_element_languages[currentPaneIndex].phrase">
+                                            <label>{{'font' | i18n}}</label>
+                                            <select ng-model="element.font_id" ng-options="f.id as f.name for f in fonts"></select>
+                                            <label>{{'size' | i18n}}</label>
+                                            <select ng-model="element.font_size" ng-options="n for n in [] | range:8:48"></select>
+                                        </div>
+                                        <div ng-switch-when="FIELD">
+                                            <label>{{'label' | i18n}}</label>
+                                            <input type="text" ng-model="element.form_element_languages[currentPaneIndex].phrase">
+                                            <div ng-show="isRequiredFieldCheckboxVisible(element)">
+                                                <label>{{'required' || i18n}}</label>
+                                                <input type="checkbox" class="regular-checkbox" id="checkbox-0" ng-model="element.required_field"  ng-true-value="1" ng-false-value="0"/>
+                                                <label for="checkbox-0"></label>
+                                            </div>
+                                        </div>
+                                        <div ng-switch-when="BUTTON">
+                                            <label>{{'label' | i18n}}</label>
+                                            <input type="text" ng-model="element.form_element_languages[currentPaneIndex].phrase">
+
+                                            <div class="color-settings">
+                                                <div class="color">
+                                                    <div>
+                                                        <div colorpicker ng-model="element.bg_style" ng-style="{'background-color':element.bg_style}"></div>
+                                                        <input type="text" ng-model="element.bg_style"/>
+                                                    </div>
+                                                </div>
+                                                <div class="color">
+                                                    <div>
+                                                        <div colorpicker ng-model="element.fg_style" ng-style="{'background-color':element.fg_style}"></div>
+                                                        <input type="text" ng-model="element.fg_style"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="help-inline"><a ng-click="closePopover()">{{'apply' | i18n}}</a></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </script>
+              <!-- bof CUSTOM FORM -->
+              <form id="custom-form" ng-style="renderFormStyle()">
+                <div class="drag-droppable" data-drop="true" jqyoui-droppable="{onDrop:'addElement'}" data-jqyoui-options="droppableOpt" data-key="0" style="position:absolute;left:10px;top:0;height:47px; width:300px">
+                  <div class="divider" ng-style="getDividerColor()"></div>
+                </div>
+                <ul id="form-sortable" ui-sortable="optSortableOptions" ng-model="formModel.form_elements">
+                  <li ng-repeat="element in formModel.form_elements track by $index" ng-class="{forceshow:popoverVisible}" ng-controller="RowCtrl" ng-init="ndx=$index"> <span class="utilities-lang">{{getLangName(currentPane)}}</span>
+                    <div class="utilities-left">
+                      <button class="btn btn-function btn-square btn-edit" ng-click="openPopover($event)" bs-popover="popoverOptions" data-show="popoverVisible"> <i class="fa-lg fa-edit"></i> </button>
+                      <button ng-show="isDeleteVisible(element)" class="btn btn-function btn-square" ng-click="removeElement($index)"> <i class="fa-lg fa-times"></i> </button>
+                    </div>
+                    <div ng-switch="element.type" ng-dblclick="openPopover($event)">
+                      <fieldset ng-switch-when="HEADER">
+                      <h4 ng-style="renderHeaderStyle(element)"> {{element.form_element_languages[currentPaneIndex].phrase}}</h4>
+                      </fieldset>
+                      <fieldset ng-switch-when="FIELD">
+                      <p style="postion:relative;">
+                        <label ng-style="renderFieldLabelStyle(element)">{{element.form_element_languages[currentPaneIndex].phrase}} <b ng-show="element.required_field=='1'" class="asterisk">*</b> </label>
+                      </p>
+                      <div ng-switch="getFieldById(element.field_id).data_type">
+                        <p ng-switch-when="text">
+                          <input ng-style="renderFieldInputStyle(element)" type="text">
+                        </p>
+                        <p ng-switch-when="email">
+                          <input ng-style="renderFieldInputStyle(element)" type="text">
+                        </p>
+                        <p ng-switch-when="number">
+                          <input ng-style="renderFieldInputStyle(element)" type="number" step="any" number-as-string>
+                        </p>
+                        <p ng-switch-when="date">
+                          <input ng-style="renderFieldInputStyle(element)" type="text" value="__/__/____">
+                        </p>
+                        <p class="signup-checkbox" ng-switch-when="boolean">
+                          <input ng-style="renderFieldInputStyle(element)" type="checkbox">
+                        </p>
+                        <p style="text-align: left" ng-switch-when="select">
+                          <select ng-model="cfieldFakeModel" ng-options="row.text as row.text for row in getFieldById(element.field_id).options">
+                            <option value=""></option>
+                          </select>
+                        </p>
+                        <p style="text-align: left" ng-switch-when="country" ng-init="stateFakeModel=getDefaultCountry()">
+                          <select ng-model="stateFakeModel" ng-options="c.code as c.name for c in countries">
+                          </select>
+                        </p>
+                        <p style="text-align: left" ng-switch-when="state">
+                          <select ng-model="stateFakeModel" ng-options="c.code as c.name for c in states">
+                          </select>
+                        </p>
+                      </div>
+                      </fieldset>
+                      <fieldset ng-switch-when="BUTTON">
+                      <div>
+                        <input ng-style="renderButtonStyle(element)" type="submit" value="{{element.form_element_languages[currentPaneIndex].phrase}}">
+                      </div>
+                      </fieldset>
+                    </div>
+                    <div class="drag-droppable" data-drop="true" jqyoui-droppable="{onDrop:'addElement'}" data-key="{{$index+1}}" data-jqyoui-options="droppableOpt" style="position:absolute;left:90px;top:40px;height:95%; width:300px">
+                      <div class="divider" ng-style="getDividerColor()"></div>
+                    </div>
+                    <div class="utilities-right">
+                      <div class="btn btn-function btn-square form-drag-handle"> <i class="fa-lg fa-bars"></i> </div>
+                    </div>
+                  </li>
+                </ul>
+              </form>
+              <!-- eof CUSTOM FORM -->
+            </div>
+
+        </div>
+        <!-- HERE -->
+      </div>
+    </div>
+    <div class="span3 custom-form-properties pull-right">
+      <div class="span12">
+        <label>Default style</label>
+        <select ng-model="formModel.text_font_id" ng-options="f.id as f.name for f in fonts" class="span12">
+        </select>
+        <select ng-model="formModel.text_font_size" ng-options="n for n in [] | range:8:48" class="span12">
+        </select>
+      </div>
+      <div class="color-settings">
+        <div class="color">
+          <div>
+            <div colorpicker ng-model="formModel.page_bg_style" ng-style="{'background-color':formModel.page_bg_style}"></div>
+            <input type="text" ng-model="formModel.page_bg_style"/>
+          </div>
+          <div>
+            <div colorpicker ng-model="formModel.form_fg_style" ng-style="{'background-color':formModel.form_fg_style}"></div>
+            <input type="text" ng-model="formModel.form_fg_style"/>
+          </div>
+        </div>
+        <div class="color">
+          <div>
+            <div colorpicker ng-model="formModel.form_bg_style" ng-style="{'background-color':formModel.form_bg_style}"></div>
+            <input type="text" ng-model="formModel.form_bg_style"/>
+          </div>
+          <div>
+            <div colorpicker ng-model="formModel.form_bg_style1" ng-style="{'background-color':formModel.form_bg_style1}"></div>
+            <input type="text" ng-model="formModel.form_bg_style1"/>
+          </div>
+        </div>
+      </div>
+    
+        <label>drag elements</label>
+        <div class="draggable" ng-class="{disabled: !element.draggable}" ng-repeat="element in elementTemplates track by $index" data-drag="{{element.draggable}}" jqyoui-draggable="{placeholder:'keep'}" data-key="{{$index}}" data-jqyoui-options="draggableOpt"> <i class="{{typeIconMapping[element.type]}}"></i> {{element.label}} <i class="fa-lg fa-bars"></i>
+        </div>
+		<b class="clearfix"></b>
+    </div>
+    <b class="clearfix"></b>
+  </div>
+   </div>
+  </div>
+  <!--- eof editor ================================================== -->
+</div>

@@ -1,0 +1,19 @@
+<div ng-controller="SignupFormsStep1Ctrl"class="main-content">
+	<div class="row-fluid">
+		<form>
+			<fieldset class="span8 offset2">
+				<label for="inputItem">{{'form_name' | i18n}}</label>
+		
+				<input ng-model="formModel.name" type="text" placeholder="New form 1" class="span12" name="inputItem" autofocus>
+				<span ng-hide="namecheck" class="alert alert-error ceck-form">{{'name_missed_alert' | i18n}}</span>
+				<span ng-hide="duplicatecheck" class="alert alert-error ceck-form">{{'name_missed_alert' | i18n}}</span>
+				<label for="textareaName">{{'description' | i18n}}</label>
+				
+				<textarea ng-model="formModel.description" class="span12" rows="6" placeholder="Enter Text" name="textareaName"></textarea>
+				<label for="inputItem">{{'default_language' | i18n}}</label>
+
+				<select ng-model="formModel.default_language_id"  ng-options="language.id as language.name |  i18n for language in languages" class="span12"></select>
+			</fieldset>
+		</form>
+	</div>
+</div>

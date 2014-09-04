@@ -1,0 +1,97 @@
+<div class="container view ng-scope" >
+	<div class="row-fluid  main-container">
+		<div class="span12 ng-scope">
+			<ul class="breadcrumb my-breadcrumb full-shadow">
+				<li>
+					<a href="#contacts">{{'lists' | i18n}}</a>
+				</li>
+				<li>
+					<a ng-href="#/contacts/list/{{listId}}">{{listName}}</a>
+				</li>
+				<li>
+					<a ng-href="#/contacts/list/{{listId}}/signupforms">{{'signup_forms'| i18n}}</a>
+				</li>
+				<li class="active">
+					{{'create_form' | i18n }}
+				</li>
+			</ul>
+			<div class="container">
+				<div class="page-header full-shadow">
+					<h1>{{currentStepTitle | i18n}}</h1>
+				</div>
+				<!--- bof PROGRESS BAR ================================================== -->
+				<div class="progress-bar-cont hidden-phone">
+                <div class="lab-progress">
+					<div  ng-class="stepStyle['step1']" ng-click="goToStep('step1')" class="clickable">
+						<span>Main settings</span><b>1</b>
+					</div>
+					<div ng-class="stepStyle['step2']" ng-click="goToStep('step2')" class="clickable">
+						<span>Design form</span><b>2</b>
+					</div>
+					<div ng-class="stepStyle['step3']" ng-click="goToStep('step3')" class="clickable">
+						<span>Subscription preferences</span><b>3</b>
+					</div>
+					<div ng-show="formWizardStep == 'step4'" ng-class="stepStyle['step4']" class="">
+						<span>Get the code</span><b>4</b>
+					</div>
+				</div>
+				<div class="progress">
+					<div ng-style="stepStyle" class="bar step-campaign" ></div>
+					<div ng-style="barStyle" class="bar bar-campaign" ></div>
+				</div>
+                </div>
+				<!--- eof PROGRESS BAR ================================================== -->
+				<div ng-switch="formWizardStep">
+					<div ng-switch-when="step1">
+						<div ng-include="'modules/contacts/signup_forms/views/signup_form_step1.html'"></div>
+						<div class="save-or-cancel">
+							<div >
+								<button  ng-click="saveAndClose()" class="btn btn-modify pull-left">
+									Save and close
+								</button>
+								<button  ng-click = "goToStep('step2')" class="btn btn-confirm pull-right">
+									Design form
+								</button>
+							</div>
+						</div>
+					</div>
+					<div ng-switch-when="step2">
+						<div ng-include="'modules/contacts/signup_forms/views/signup_form_step2.html'"></div>
+						<div class="save-or-cancel">
+							<button ng-click="saveAndClose()" class="btn btn-modify pull-left">
+								Save and close
+							</button>
+							<button ng-click="goToStep('step3')" class="btn btn-confirm pull-right">
+								Setup preferences
+							</button>
+						</div>
+					</div>
+					<div ng-switch-when="step3">
+						<div ng-include="'modules/contacts/signup_forms/views/signup_form_step3.html'"></div>
+						<div class="save-or-cancel">
+							<button ng-click="saveAndClose()" class="btn btn-modify pull-left">
+								Save and close
+							</button>
+							<div align="justify">
+								<button  ng-click="finishAndGetCode()" class="btn btn-confirm pull-right">
+									Activate and get code
+								</button>
+							</div>
+						</div>
+					</div>
+					<div ng-switch-when="step4">
+						<div ng-include="'modules/contacts/signup_forms/views/signup_form_step4.html'"></div>
+						<div class="save-or-cancel">
+							<button  ng-click="returnToForms()" class="btn btn-confirm pull-left">
+								Return to forms
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<pre ng-if="appmode.debug" style="margin-top:30px;font-size: 11px;clear:both;line-height: 10px">{{formModel | json}}</pre>

@@ -1,0 +1,13 @@
+{
+  "name": "newsletter",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "~1.0.5",
+    "json3": "~3.2.4",
+    "angular-resource": "~1.0.5",
+    "angular-cookies": "~1.0.5",
+    "angular-sanitize": "~1.0.5"
+  },
+  "devDependencies": {
+  }
+}

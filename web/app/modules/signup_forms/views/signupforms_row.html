@@ -1,0 +1,29 @@
+<td style="width: 99%"><a ng-href="#/contacts/list/{{parameters.listId}}/signupforms/{{row.id}}" >{{row.name}}</a></td>  
+<td class="nowrap">{{row.views}}</td>  							   
+<td class="nowrap">{{row.signups}}</td>
+<td class="nowrap onoffswitch" ng-switch="row.active">
+	<!--<onoff ng-model="row.active" name="{{row.id}}"></onoff>-->
+	<ng-confirm ng-switch-when="1" title="{{ 'disable_form' | i18n }}" action-text="{{ 'are_you_sure_to_disable_form' | i18n:{form:row.name} }}" action-button-text="{{'yes' | i18n}}" action-function="actions.updateForm(row)" cancel-button-text="{{'no'| i18n}}" cancel-function="actions.cancel()">
+		<div class="onoffswitch">
+		    <input  type="checkbox" disabled name="{{row.id}}" class="onoffswitch-checkbox" checked="" id="{{row.id}}">
+		    <label class="onoffswitch-label" for="{{row.id}}">
+		        <div class="onoffswitch-inner"></div>
+		        <div class="onoffswitch-switch"></div>
+		    </label>
+		</div>
+	</ng-confirm>
+	<ng-confirm ng-switch-when="0" title="{{ 'activate_form' | i18n }}" action-text="{{ 'are_you_sure_to_activate_form' | i18n:{form:row.name} }}" action-button-text="{{'yes' | i18n}}" action-function="actions.updateForm(row)" cancel-button-text="{{'no'| i18n}}" cancel-function="actions.cancel()">
+		<div class="onoffswitch">
+		    <input type="checkbox" disabled name="{{row.id}}" class="onoffswitch-checkbox" id="{{row.id}}">
+		    <label class="onoffswitch-label" for="{{row.id}}">
+		        <div class="onoffswitch-inner"></div>
+		        <div class="onoffswitch-switch"></div>
+		    </label>
+		</div>
+	</ng-confirm>
+</td>
+<td width="20">
+<ng-confirm title="Delete form" action-text="{{ 'are_you_sure_to_delete' | i18n }} {{row.name}} {{'form' | i18n }}?" action-button-text="{{'yes' | i18n}}" action-function="actions.removeForm(row.id, row.name)" cancel-button-text="{{'no'| i18n}}" cancel-function="actions.cancel()">
+	 <a class="btn btn-square"> <i class="fa-lg fa-times"></i></a>
+</ng-confirm>
+</td>
