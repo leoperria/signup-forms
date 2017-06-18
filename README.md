@@ -1,7 +1,11 @@
 Emailchef signup-forms
 ======================
 
-This is just a demo of a UI component I made for Emailchef. It's based on html5, angularjs, jquery, jqueryUI.
+This is a demo of a UI component I made for Emailchef. Look at its code (an extract) if you are curious:
+
+https://github.com/leoperria/signup-forms/tree/master/web/app/modules/signup_forms
+
+It's based on html5, angularjs, jquery, jqueryUI.
 
 To see it working in production please subscribe free to http://www.emailchef.com/ !
 
