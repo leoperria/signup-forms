@@ -7,4 +7,4 @@ To see it working in production please subscribe free to http://www.emailchef.co
 
 ![Emailchef Signup form editor](https://media.giphy.com/media/Lv0pMqzGCcl8Y/giphy.gif)
 
-THere the link to the full video: http://vimeo.com/105247568
+Link to the full video: http://vimeo.com/105247568
